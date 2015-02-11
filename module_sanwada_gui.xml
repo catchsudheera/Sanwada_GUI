@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_sanwada_gui" default="compile.module.sanwada_gui">
+  <dirname property="module.sanwada_gui.basedir" file="${ant.file.module_sanwada_gui}"/>
+  
+  <property name="module.jdk.home.sanwada_gui" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.sanwada_gui" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.sanwada_gui" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.sanwada_gui" value="-encoding UTF-8 -source 1.6 ${compiler.args}"/>
+  
+  <property name="sanwada_gui.output.dir" value="${module.sanwada_gui.basedir}/out/production/Sanwada_GUI"/>
+  <property name="sanwada_gui.testoutput.dir" value="${module.sanwada_gui.basedir}/out/test/Sanwada_GUI"/>
+  
+  <path id="sanwada_gui.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="sanwada_gui.module.production.classpath">
+    <path refid="${module.jdk.classpath.sanwada_gui}"/>
+    <path refid="library.weka.classpath"/>
+  </path>
+  
+  <path id="sanwada_gui.runtime.production.module.classpath">
+    <pathelement location="${sanwada_gui.output.dir}"/>
+    <path refid="library.weka.classpath"/>
+  </path>
+  
+  <path id="sanwada_gui.module.classpath">
+    <path refid="${module.jdk.classpath.sanwada_gui}"/>
+    <pathelement location="${sanwada_gui.output.dir}"/>
+    <path refid="library.weka.classpath"/>
+  </path>
+  
+  <path id="sanwada_gui.runtime.module.classpath">
+    <pathelement location="${sanwada_gui.testoutput.dir}"/>
+    <pathelement location="${sanwada_gui.output.dir}"/>
+    <path refid="library.weka.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.sanwada_gui">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.sanwada_gui">
+    <patternset refid="excluded.from.module.sanwada_gui"/>
+  </patternset>
+  
+  <path id="sanwada_gui.module.sourcepath">
+    <dirset dir="${module.sanwada_gui.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.sanwada_gui" depends="compile.module.sanwada_gui.production,compile.module.sanwada_gui.tests" description="Compile module Sanwada_GUI"/>
+  
+  <target name="compile.module.sanwada_gui.production" depends="register.custom.compilers" description="Compile module Sanwada_GUI; production classes">
+    <mkdir dir="${sanwada_gui.output.dir}"/>
+    <javac2 destdir="${sanwada_gui.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.sanwada_gui}/javac">
+      <compilerarg line="${compiler.args.sanwada_gui}"/>
+      <bootclasspath refid="sanwada_gui.module.bootclasspath"/>
+      <classpath refid="sanwada_gui.module.production.classpath"/>
+      <src refid="sanwada_gui.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.sanwada_gui"/>
+    </javac2>
+    
+    <copy todir="${sanwada_gui.output.dir}">
+      <fileset dir="${module.sanwada_gui.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.sanwada_gui.tests" depends="register.custom.compilers,compile.module.sanwada_gui.production" description="compile module Sanwada_GUI; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.sanwada_gui" description="cleanup module">
+    <delete dir="${sanwada_gui.output.dir}"/>
+    <delete dir="${sanwada_gui.testoutput.dir}"/>
+  </target>
+</project>
